@@ -1,9 +1,11 @@
 import type { Plugin, ResolvedConfig } from 'vite'
+import { resolveConfig } from 'vite'
 import { generateSW, injectManifest } from 'workbox-build'
 import { generateSWRegister, injectServiceWorker } from './html'
 import { ResolvedVitePWAOptions, VitePWAOptions } from './types'
 import { resolveOptions } from './config'
 import { FILE_MANIFEST, FILE_SW_REGISTER } from './constants'
+import Rollup from 'rollup'
 
 export function VitePWA(userOptions: Partial<VitePWAOptions> = {}): Plugin {
   let viteConfig: ResolvedConfig
@@ -41,11 +43,28 @@ export function VitePWA(userOptions: Partial<VitePWAOptions> = {}): Plugin {
         }
       }
     },
-    buildEnd() {
-      if (options.strategies === 'injectManifest')
+    async buildEnd() {
+      if (options.strategies === 'injectManifest') {
+        const rollup = require('rollup') as typeof Rollup
+        const bundle = await rollup.rollup({
+          input: 'src/sw.js',
+          plugins: viteConfig.plugins as Plugin[],
+        })
+        try {
+          await bundle.write({
+            format: 'es',
+            dir: options.outDir,
+            file: options.filename,
+            sourcemap: viteConfig.build.sourcemap
+          })
+        } finally {
+          await bundle.close()
+        }
         injectManifest(options.injectManifest)
-      else
+      }
+      else {
         generateSW(options.workbox)
+      }
     },
   }
 }

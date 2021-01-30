@@ -16,7 +16,7 @@ export function resolveOptions(options: Partial<VitePWAOptions>, viteConfig: Res
     : {}
 
   const {
-    srcDir = 'public',
+    srcDir = 'src',
     outDir = viteConfig.build.outDir || 'dist',
     inlineRegister = true,
     filename = 'sw.js',
@@ -39,6 +39,7 @@ export function resolveOptions(options: Partial<VitePWAOptions>, viteConfig: Res
     // prevent tsup replacing `process.env`
     // eslint-disable-next-line dot-notation
     mode: process['env']['NODE_ENV'] || 'production',
+    navigateFallback: '/index.html',
   }
 
   const defaultInjectManifest: InjectManifestConfig = {
@@ -62,6 +63,7 @@ export function resolveOptions(options: Partial<VitePWAOptions>, viteConfig: Res
   const injectManifest = Object.assign({}, defaultInjectManifest, options.injectManifest || {})
 
   return {
+    swSrc,
     swDest,
     srcDir,
     outDir,
