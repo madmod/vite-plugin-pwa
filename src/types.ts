@@ -57,6 +57,12 @@ export interface VitePWAOptions {
    * The workbox object for `injectManifest`
    */
   injectManifest: Partial<InjectManifestConfig>
+  /**
+   * The crossorigin attribute added to link and script tags. If empty no crossorigin attribute is set.
+   *
+   * @default ''
+   */
+  crossorigin?: string
 }
 
 export interface ResolvedVitePWAOptions extends Required<VitePWAOptions> {

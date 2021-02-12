@@ -20,7 +20,7 @@ export function injectServiceWorker(html: string, options: ResolvedVitePWAOption
     return html.replace(
       '</head>',
       `
-<link rel="manifest" href="${join(options.basePath, FILE_MANIFEST)}">
+<link rel="manifest" ${options.crossorigin ? `crossorigin="${options.crossorigin}" ` : ''}href="${join(options.basePath, FILE_MANIFEST)}">
 <script>${generateSWRegister(options)}</script>
 </head>`.trim(),
     )
@@ -29,8 +29,8 @@ export function injectServiceWorker(html: string, options: ResolvedVitePWAOption
     return html.replace(
       '</head>',
       `
-<link rel="manifest" href="${join(options.basePath, FILE_MANIFEST)}">
-<script src="${join(options.basePath, FILE_SW_REGISTER)}"></script>
+<link rel="manifest" ${options.crossorigin ? `crossorigin="${options.crossorigin}" ` : ''}href="${join(options.basePath, FILE_MANIFEST)}">
+<script ${options.crossorigin ? `crossorigin="${options.crossorigin}" ` : ''}src="${join(options.basePath, FILE_SW_REGISTER)}"></script>
 </head>`.trim(),
     )
   }

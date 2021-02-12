@@ -25,6 +25,7 @@ export function resolveOptions(options: Partial<VitePWAOptions>, viteConfig: Res
     filename = 'sw.js',
     strategies = 'generateSW',
     minify = true,
+    crossorigin = ''
   } = options
 
   const basePath = resolveBathPath(viteConfig.base)
@@ -77,5 +78,6 @@ export function resolveOptions(options: Partial<VitePWAOptions>, viteConfig: Res
     basePath,
     scope,
     minify,
+    crossorigin,
   }
 }
